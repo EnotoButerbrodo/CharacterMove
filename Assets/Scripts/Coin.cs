@@ -17,7 +17,7 @@ public class Coin : MonoBehaviour
         transform.Rotate(0, 0,  RotationSpeed * Time.deltaTime);
         //transform.Translate(0, Mathf.Sin(Time.time), 0);
         var _newPosition = transform.position;
-        _newPosition.y += 0.001f * Mathf.Sin((Mathf.PI) * Time.time + transform.position.x);
+        _newPosition.y += 0.004f * Mathf.Sin((Mathf.PI) * Time.time + transform.position.x);
         transform.position = _newPosition;
     }
 
