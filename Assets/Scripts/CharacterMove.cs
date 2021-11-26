@@ -2,60 +2,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class CharacterMove : MonoBehaviour
 {
-    [SerializeField]public float Speed = 6f;
-    [SerializeField]public float RunSpeed = 18f;
-    [SerializeField]public float RotationSpeed = 500f;
+    [SerializeField, Range(0.1f, 100f)] private float speed = 10f;
+    [SerializeField, Range(0.1f, 100f)] private float speedBooster = 3f;
+    [SerializeField, Range(0.1f, 600f)] private float rotationSpeed = 200f;
+    [SerializeField, Range(0.1f, 100f)] private float maxAcceleration = 20f;
 
-    MoveState moveState = MoveState.Walk;
-    enum MoveState{
-        Walk,
-        Run
-    }
+    Vector3 velocity;
+    Vector3 inputX, inputZ;
+    private Rigidbody rb;
 
-    private void Start() {
-        Cursor.lockState = CursorLockMode.Locked;     
-    }
-    void Update()
+    private float inputRotation, currentSpeed;
+
+    private void Awake()
     {
-        Move();
-        Rotate();
+        rb = GetComponent<Rigidbody>();
+        currentSpeed = speed;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Move(){
-        CheckMoveState();
-        float currentSpeed = GetSpeed();
-        Vector3 offset = new Vector3(Input.GetAxis("Horizontal"), 0,
-                   Input.GetAxis("Vertical")) * Time.deltaTime * currentSpeed;
-        transform.Translate(offset);
+    private void Update()
+    {
+       GetInputs();
+       Rotate();
     }
 
     void Rotate(){
-         float yRotation = Input.GetAxis("Mouse X") * Time.deltaTime * RotationSpeed;
+         float yRotation = Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed;
          transform.Rotate(0, yRotation , 0);
     }
 
-    //Проверка текущего состояния игрока
-    void CheckMoveState(){
-        if(Input.GetKeyDown(KeyCode.LeftShift) 
-            && moveState != MoveState.Run){
-            moveState = MoveState.Run;
-            return;
-        }
-        if(Input.GetKeyUp(KeyCode.LeftShift)
-            && moveState == MoveState.Run){
-            moveState = MoveState.Walk;
-            return;
-        } 
-    }
-    //В зависимости от состояния получить скорость
-    float GetSpeed(){
-        return moveState switch{
-            MoveState.Walk => Speed,
-            MoveState.Run => RunSpeed,
-            _ => Speed
-        };
+    void GetInputs(){
+        inputX = transform.right * Input.GetAxis("Horizontal");
+        inputZ = transform.forward * Input.GetAxis("Vertical");
+        inputRotation = Input.GetAxis("Mouse X");
+        currentSpeed = GetSpeed();
     }
 
+    float GetSpeed(){
+        if(Input.GetKey(KeyCode.LeftShift)){
+            return speed * speedBooster;
+        }
+        else 
+            return speed;
+    }
+
+    private void FixedUpdate()
+    {
+        velocity = rb.velocity;
+        float maxSpeedChange = maxAcceleration * Time.deltaTime;
+        velocity = (inputX + inputZ) * currentSpeed * maxSpeedChange;
+        velocity.y = rb.velocity.y;
+        rb.velocity = velocity;
+        Debug.Log(velocity);
+    }
 }
+
+

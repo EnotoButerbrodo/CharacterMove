@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         var rb = FindObjectOfType<CharacterMove>().transform.GetComponent<Rigidbody>();
         WinImage.gameObject.SetActive(true);
         WinSound.Play();
-        rb.AddForce(Vector3.up * Random.Range(100f, 1000f), ForceMode.Impulse);
+        rb.AddForce(Vector3.up * Random.Range(1000f, 10000f), ForceMode.Impulse);
         rb.freezeRotation = false;
         rb.AddTorque(new Vector3(Random.Range(0f, 300f),Random.Range(0f, 300f),Random.Range(0f, 300f)), ForceMode.Impulse);
         yield return new WaitForSeconds(5);
