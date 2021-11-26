@@ -25,7 +25,8 @@ public class Coin : MonoBehaviour
         if(isActive){
             isActive = false;
             if(other.transform.CompareTag("Player")){
-               var audio = GetComponent<AudioSource>();
+                GetComponent<CapsuleCollider>().enabled = false;
+                var audio = GetComponent<AudioSource>();
                 AudioSource.PlayClipAtPoint(pickupAudio, transform.position);
                 FindObjectOfType<GameManager>().PickUpCoin();
                 Destroy(gameObject);
