@@ -10,6 +10,12 @@ public class CharacterMove : MonoBehaviour
     [SerializeField, Range(0.1f, 600f)] private float rotationSpeed = 200f;
     [SerializeField, Range(0.1f, 100f)] private float maxAcceleration = 20f;
 
+    enum MoveState
+    {
+        Walk,
+        Run
+    }
+    MoveState moveState = MoveState.Walk;
     Vector3 velocity;
     Vector3 inputX, inputZ;
     private Rigidbody rb;
@@ -29,6 +35,18 @@ public class CharacterMove : MonoBehaviour
        Rotate();
     }
 
+    void CheckMoveState(){
+        if(Input.GetKeyDown(KeyCode.LeftShift)
+            && moveState == MoveState.Walk){
+                moveState = MoveState.Run;
+                return;
+            }
+        if(Input.GetKeyUp(KeyCode.LeftShift)
+            && moveState == MoveState.Run){
+                moveState = MoveState.Walk;
+                return;
+            }
+    }
     void Rotate(){
          float yRotation = Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed;
          transform.Rotate(0, yRotation , 0);
@@ -38,15 +56,16 @@ public class CharacterMove : MonoBehaviour
         inputX = transform.right * Input.GetAxis("Horizontal");
         inputZ = transform.forward * Input.GetAxis("Vertical");
         inputRotation = Input.GetAxis("Mouse X");
+        CheckMoveState();
         currentSpeed = GetSpeed();
     }
 
     float GetSpeed(){
-        if(Input.GetKey(KeyCode.LeftShift)){
-            return speed * speedBooster;
-        }
-        else 
-            return speed;
+        return moveState switch{
+            MoveState.Run => speed * speedBooster,
+            MoveState.Walk => speed,
+            _ => speed
+        };
     }
 
     private void FixedUpdate()
