@@ -2172,14 +2172,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2987088168751130456, guid: d6b39033621b6b244b8c3826fbab8ba1, type: 3}
-      propertyPath: m_Drag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987088168751130456, guid: d6b39033621b6b244b8c3826fbab8ba1, type: 3}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4932252489650646628, guid: d6b39033621b6b244b8c3826fbab8ba1, type: 3}
       propertyPath: m_Name
       value: Character
