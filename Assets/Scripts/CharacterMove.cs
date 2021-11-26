@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterMove : MonoBehaviour
@@ -33,6 +34,7 @@ public class CharacterMove : MonoBehaviour
     {
        GetInputs();
        Rotate();
+       
     }
 
     void CheckMoveState(){
@@ -67,6 +69,7 @@ public class CharacterMove : MonoBehaviour
             _ => speed
         };
     }
+   
 
     private void FixedUpdate()
     {

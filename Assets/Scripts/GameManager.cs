@@ -11,12 +11,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text CoinsCountTextBlock;
     [SerializeField] Image WinImage;
     [SerializeField] AudioSource WinSound;
+
+    public GameObject Character;
     int allCoinsCount;
     int coinsCount;
     int CoinsCount{
         get => coinsCount;
         set{
             coinsCount = value;
+            CheckWin();
             UpdateCointCountText();
         }
     }
@@ -32,14 +35,16 @@ public class GameManager : MonoBehaviour
         
     }
 
+    private void Update() {
+        CheckLose();
+    }
+
     public void PickUpCoin(){
         CoinsCount++;
     }
 
     void UpdateCointCountText(){
-        CheckWin();
         CoinsCountTextBlock.text = CoinsCountText;
-
     }
 
     void CheckWin(){
@@ -49,6 +54,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    void CheckLose(){
+        if(Character.transform.position.y <= -30)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     IEnumerator Win(){
         var rb = FindObjectOfType<CharacterMove>().transform.GetComponent<Rigidbody>();
         WinImage.gameObject.SetActive(true);
@@ -61,7 +71,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         //yield return new WaitForSeconds(1);
-        
     }
 
 }
