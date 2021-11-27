@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         WinImage.gameObject.SetActive(false);
-        allCoinsCount = Coins.GetComponentsInChildren<Coin>().Count();
+        //Получить максимальное количество монет
+        allCoinsCount = Coins.GetComponentsInChildren<Coin>().Length;
         UpdateCointCountText();
         
     }

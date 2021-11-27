@@ -6,31 +6,35 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {   
     public AudioClip pickupAudio;
-    bool isActive = true;
+    bool IsPickuped = false;
     [SerializeField] float RotationSpeed = 180f;
     // Update is called once per frame
+
     void Update()
     {
        Move();
     }
+
     void Move(){
+        //Вращение вокрус y оси
         transform.Rotate(0, 0,  RotationSpeed * Time.deltaTime);
-        //transform.Translate(0, Mathf.Sin(Time.time), 0);
+        
+        //Перемещение вверх вниз по оси y
         var _newPosition = transform.position;
         _newPosition.y += 0.004f * Mathf.Sin((Mathf.PI) * Time.time + transform.position.x);
+
         transform.position = _newPosition;
     }
 
-    private void OnCollisionEnter(Collision other) {
-        if(isActive){
-            isActive = false;
-            if(other.transform.CompareTag("Player")){
-                GetComponent<CapsuleCollider>().enabled = false;
-                var audio = GetComponent<AudioSource>();
-                AudioSource.PlayClipAtPoint(pickupAudio, transform.position);
-                FindObjectOfType<GameManager>().PickUpCoin();
-                Destroy(gameObject);
-            }
+    private void OnTriggerEnter(Collider collider) {
+        if(IsPickuped) return;
+        if(collider.GetComponent<CharacterMove>() is CharacterMove){
+            IsPickuped = true;
+            GetComponent<CapsuleCollider>().enabled = false;
+            AudioSource.PlayClipAtPoint(pickupAudio, transform.position);
+            FindObjectOfType<GameManager>().PickUpCoin();
+            Destroy(gameObject);
         }
+        
     }
 }

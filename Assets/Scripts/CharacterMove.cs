@@ -16,9 +16,9 @@ public class CharacterMove : MonoBehaviour
         Walk,
         Run
     }
-    MoveState moveState = MoveState.Walk;
-    Vector3 velocity;
-    Vector3 inputX, inputZ;
+    private MoveState moveState = MoveState.Walk;
+    private Vector3 velocity;
+    private Vector3 inputX, inputZ;
     private Rigidbody rb;
 
     private float inputRotation, currentSpeed;
@@ -37,7 +37,8 @@ public class CharacterMove : MonoBehaviour
        
     }
 
-    void CheckMoveState(){
+    private void CheckMoveState()
+    {
         if(Input.GetKeyDown(KeyCode.LeftShift)
             && moveState == MoveState.Walk){
                 moveState = MoveState.Run;
@@ -49,12 +50,13 @@ public class CharacterMove : MonoBehaviour
                 return;
             }
     }
-    void Rotate(){
+    
+    private void Rotate(){
          float yRotation = Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed;
          transform.Rotate(0, yRotation , 0);
     }
 
-    void GetInputs(){
+    private void GetInputs(){
         inputX = transform.right * Input.GetAxis("Horizontal");
         inputZ = transform.forward * Input.GetAxis("Vertical");
         inputRotation = Input.GetAxis("Mouse X");
@@ -62,23 +64,19 @@ public class CharacterMove : MonoBehaviour
         currentSpeed = GetSpeed();
     }
 
-    float GetSpeed(){
+    private float GetSpeed(){
         return moveState switch{
             MoveState.Run => speed * speedBooster,
             MoveState.Walk => speed,
             _ => speed
         };
     }
-   
 
     private void FixedUpdate()
     {
-        velocity = rb.velocity;
         float maxSpeedChange = maxAcceleration * Time.deltaTime;
-        velocity = (inputX + inputZ) * currentSpeed * maxSpeedChange;
-        velocity.y = rb.velocity.y;
-        rb.velocity = velocity;
-        Debug.Log(velocity);
+        //------------- Оси X и Z-----------Ускорение------------------------Ось Y--------------------
+        rb.velocity = ((inputX + inputZ) * currentSpeed * maxSpeedChange) + (Vector3.up * rb.velocity.y);
     }
 }
 
