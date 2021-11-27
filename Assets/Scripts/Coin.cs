@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(CapsuleCollider))]
 public class Coin : MonoBehaviour
 {   
     public AudioClip pickupAudio;
-    bool IsPickuped = false;
-    [SerializeField] float RotationSpeed = 180f;
+    private bool IsPickuped = false;
+    [SerializeField] private float RotationSpeed = 180f;
     // Update is called once per frame
 
-    void Update()
+    private void Update()
     {
-       Move();
+       MoveAndRotate();
     }
 
-    void Move(){
+    private void MoveAndRotate(){
         //Вращение вокрус y оси
         transform.Rotate(0, 0,  RotationSpeed * Time.deltaTime);
         
@@ -28,6 +28,7 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider) {
         if(IsPickuped) return;
+
         if(collider.GetComponent<CharacterMove>() is CharacterMove){
             IsPickuped = true;
             GetComponent<CapsuleCollider>().enabled = false;

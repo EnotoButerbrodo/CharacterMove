@@ -7,15 +7,16 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
     [SerializeField] GameObject Coins;
     [SerializeField] Text CoinsCountTextBlock;
     [SerializeField] Image WinImage;
     [SerializeField] AudioSource WinSound;
 
     public GameObject Character;
-    int allCoinsCount;
-    int coinsCount;
-    int CoinsCount{
+    private int allCoinsCount;
+    private int coinsCount;
+    private int CoinsCount{
         get => coinsCount;
         set{
             coinsCount = value;
@@ -23,11 +24,12 @@ public class GameManager : MonoBehaviour
             UpdateCointCountText();
         }
     }
-    string CoinsCountText {
+
+    private string CoinsCountText {
         get => $"{CoinsCount} / {allCoinsCount}";
     }
 
-    void Start()
+    private void Start()
     {
         WinImage.gameObject.SetActive(false);
         //Получить максимальное количество монет
@@ -44,34 +46,35 @@ public class GameManager : MonoBehaviour
         CoinsCount++;
     }
 
-    void UpdateCointCountText(){
+    private void UpdateCointCountText(){
         CoinsCountTextBlock.text = CoinsCountText;
     }
 
-    void CheckWin(){
+    private void CheckWin(){
         if(CoinsCount >= allCoinsCount){
             StartCoroutine(Win());
-
         }
     }
 
-
-    void CheckLose(){
+    private void CheckLose(){
         if(Character.transform.position.y <= -30)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     IEnumerator Win(){
-        var rb = FindObjectOfType<CharacterMove>().transform.GetComponent<Rigidbody>();
+
+        var rb = Character.GetComponent<Rigidbody>();
         WinImage.gameObject.SetActive(true);
         WinSound.Play();
+
         rb.AddForce(Vector3.up * Random.Range(1000f, 10000f), ForceMode.Impulse);
         rb.freezeRotation = false;
         rb.AddTorque(new Vector3(Random.Range(0f, 300f),Random.Range(0f, 300f),Random.Range(0f, 300f)), ForceMode.Impulse);
+
         yield return new WaitForSeconds(5);
         WinImage.gameObject.SetActive(false);
         yield return new WaitForSeconds(5);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        //yield return new WaitForSeconds(1);
     }
 
 }

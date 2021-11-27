@@ -77,6 +77,7 @@ public class CharacterMove : MonoBehaviour
         float maxSpeedChange = maxAcceleration * Time.deltaTime;
         //------------- Оси X и Z-----------Ускорение------------------------Ось Y--------------------
         rb.velocity = ((inputX + inputZ) * currentSpeed * maxSpeedChange) + (Vector3.up * rb.velocity.y);
+       
     }
 }
 
