@@ -29,7 +29,7 @@ public class Coin : MonoBehaviour
     private void OnTriggerEnter(Collider collider) {
         if(IsPickuped) return;
 
-        if(collider.GetComponent<CharacterMove>() is CharacterMove){
+        if(collider.GetComponent<CharacterMove>()){
             IsPickuped = true;
             GetComponent<CapsuleCollider>().enabled = false;
             AudioSource.PlayClipAtPoint(pickupAudio, transform.position);

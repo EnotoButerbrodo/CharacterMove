@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         //Получить максимальное количество монет
         allCoinsCount = Coins.GetComponentsInChildren<Coin>().Length;
         UpdateCointCountText();
+
+        Cursor.lockState = CursorLockMode.Locked;
         
     }
 
